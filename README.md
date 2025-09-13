@@ -39,7 +39,7 @@ Aplikasi **Content Management System (CMS)** sederhana yang dibuat menggunakan *
 
     ```bash
     git clone https://github.com/febryana0219/cms-app-fe-test-kds.git
-    cd cms-app
+    cd cms-app-fe-test-kds
     ```
 
 2. Instal dependensi
