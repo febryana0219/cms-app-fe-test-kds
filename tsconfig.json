@@ -7,7 +7,7 @@
       "esnext"
     ],
     "module": "esnext",
-    "moduleResolution": "bundler", // atau "node" jika TS <5
+    "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "jsx": "preserve",
     "esModuleInterop": true,

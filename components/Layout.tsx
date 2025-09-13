@@ -1,4 +1,3 @@
-// components/Layout.tsx
 import React from 'react';
 import {
   AppBar,
@@ -13,6 +12,7 @@ import {
   List,
   ListItem,
   ListItemText,
+  ListItemButton,
   Container,
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
@@ -91,8 +91,11 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
       <Drawer open={mobileOpen} onClose={() => setMobileOpen(false)}>
         <Box sx={{ width: 250 }} role="presentation" onClick={() => setMobileOpen(false)}>
           <List>
-            <ListItem button onClick={() => router.push('/home')}>
-              <ListItemText primary="Home" />
+            {/* Home */}
+            <ListItem disablePadding>
+              <ListItemButton onClick={() => router.push('/home')}>
+                <ListItemText primary="Home" />
+              </ListItemButton>
             </ListItem>
 
             {/* menu yang baru ditambahkan akan muncul di sini */}
@@ -102,18 +105,27 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                   <ListItemText primary={g.name} />
                 </ListItem>
                 {menus.filter(m => m.groupId === g.id).map(m => (
-                  <ListItem key={m.id} sx={{ pl: 4 }}>
-                    <ListItemText primary={m.title} />
+                  <ListItem key={m.id} disablePadding sx={{ pl: 4 }}>
+                    <ListItemButton>
+                      <ListItemText primary={m.title} />
+                    </ListItemButton>
                   </ListItem>
                 ))}
               </React.Fragment>
             ))}
 
-            <ListItem button onClick={() => router.push('/settings')}>
-              <ListItemText primary="Settings" />
+            {/* Settings */}
+            <ListItem disablePadding>
+              <ListItemButton onClick={() => router.push('/settings')}>
+                <ListItemText primary="Settings" />
+              </ListItemButton>
             </ListItem>
-            <ListItem button onClick={() => { logout(); router.push('/'); }}>
-              <ListItemText primary="Logout" />
+
+            {/* Logout */}
+            <ListItem disablePadding>
+              <ListItemButton onClick={() => { logout(); router.push('/'); }}>
+                <ListItemText primary="Logout" />
+              </ListItemButton>
             </ListItem>
           </List>
         </Box>
