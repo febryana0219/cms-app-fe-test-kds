@@ -1,4 +1,3 @@
-// pages/settings.tsx
 import React from 'react';
 import { Typography, Box } from '@mui/material';
 import MenuGroupList from '../components/MenuGroupList';

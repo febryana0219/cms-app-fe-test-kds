@@ -1,16 +1,19 @@
-import React from 'react';
-import { Typography, Box, Grid, Card, CardContent } from '@mui/material';
-import { useStore } from '../lib/store';
+import React from "react";
+import { Typography, Box, Card, CardContent, Grid } from "@mui/material";
+import { useStore } from "../lib/store";
 
 export default function Home() {
-  const groups = useStore(s => s.menuGroups);
-  const menus = useStore(s => s.menus);
+  const groups = useStore((s) => s.menuGroups);
+  const menus = useStore((s) => s.menus);
 
   return (
     <Box>
-      <Typography variant="h4" gutterBottom>Welcome to the CMS</Typography>
+      <Typography variant="h4" gutterBottom>
+        Welcome to the CMS
+      </Typography>
       <Typography variant="body1" sx={{ mb: 2 }}>
-        This website was created for technical testing purposes at <b>PT Klik Digital Sinergi</b>
+        This website was created for technical testing purposes at{" "}
+        <b>PT Klik Digital Sinergi</b>
       </Typography>
 
       <Grid container spacing={2}>
