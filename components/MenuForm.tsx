@@ -22,22 +22,31 @@ type Props = {
 
 const schema = yup.object({
   title: yup.string().required('Title required'),
-  url: yup.string().url('Must be a valid URL').notRequired(),
+  url: yup.string().url('Must be a valid URL').nullable().optional(),
 });
 
-type MenuFormInputs = yup.InferType<typeof schema>;
+type MenuFormInputs = {
+  title: string;
+  url?: string | null;
+};
 
 export default function MenuForm({ open, groupId, initial, onClose }: Props) {
   const addMenu = useStore((s) => s.addMenu);
   const updateMenu = useStore((s) => s.updateMenu);
 
   const { control, handleSubmit, reset } = useForm<MenuFormInputs>({
-    defaultValues: { title: initial?.title || '', url: initial?.url || '' },
-    resolver: yupResolver(schema),
+    defaultValues: {
+      title: initial?.title ?? '',
+      url: initial?.url ?? '',
+    },
+    resolver: yupResolver(schema) as any,
   });
 
   React.useEffect(() => {
-    reset({ title: initial?.title || '', url: initial?.url || '' });
+    reset({
+      title: initial?.title ?? '',
+      url: initial?.url ?? '',
+    });
   }, [initial, reset]);
 
   const onSubmit = async (data: MenuFormInputs) => {
