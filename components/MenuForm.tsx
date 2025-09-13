@@ -1,5 +1,13 @@
 import React from 'react';
-import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField } from '@mui/material';
+import {
+  Box,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  TextField,
+} from '@mui/material';
 import { useForm, Controller } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -14,14 +22,16 @@ type Props = {
 
 const schema = yup.object({
   title: yup.string().required('Title required'),
-  url: yup.string().url('Must be a valid URL').optional(),
+  url: yup.string().url('Must be a valid URL').notRequired(),
 });
 
-export default function MenuForm({ open, groupId, initial, onClose }: Props) {
-  const addMenu = useStore(s => s.addMenu);
-  const updateMenu = useStore(s => s.updateMenu);
+type MenuFormInputs = yup.InferType<typeof schema>;
 
-  const { control, handleSubmit, reset } = useForm({
+export default function MenuForm({ open, groupId, initial, onClose }: Props) {
+  const addMenu = useStore((s) => s.addMenu);
+  const updateMenu = useStore((s) => s.updateMenu);
+
+  const { control, handleSubmit, reset } = useForm<MenuFormInputs>({
     defaultValues: { title: initial?.title || '', url: initial?.url || '' },
     resolver: yupResolver(schema),
   });
@@ -30,13 +40,15 @@ export default function MenuForm({ open, groupId, initial, onClose }: Props) {
     reset({ title: initial?.title || '', url: initial?.url || '' });
   }, [initial, reset]);
 
-  const onSubmit = async (data: any) => {
+  const onSubmit = async (data: MenuFormInputs) => {
     if (!groupId) return;
+
     if (initial?.id) {
-      await updateMenu(initial.id!, data.title, data.url);
+      await updateMenu(initial.id!, data.title, data.url || undefined);
     } else {
-      await addMenu(groupId, data.title, data.url);
+      await addMenu(groupId, data.title, data.url || undefined);
     }
+
     reset({ title: '', url: '' });
     onClose();
   };
@@ -50,14 +62,28 @@ export default function MenuForm({ open, groupId, initial, onClose }: Props) {
             name="title"
             control={control}
             render={({ field, fieldState }) => (
-              <TextField {...field} fullWidth label="Title" margin="normal" error={!!fieldState.error} helperText={fieldState.error?.message} />
+              <TextField
+                {...field}
+                fullWidth
+                label="Title"
+                margin="normal"
+                error={!!fieldState.error}
+                helperText={fieldState.error?.message}
+              />
             )}
           />
           <Controller
             name="url"
             control={control}
             render={({ field, fieldState }) => (
-              <TextField {...field} fullWidth label="URL (optional)" margin="normal" error={!!fieldState.error} helperText={fieldState.error?.message} />
+              <TextField
+                {...field}
+                fullWidth
+                label="URL (optional)"
+                margin="normal"
+                error={!!fieldState.error}
+                helperText={fieldState.error?.message}
+              />
             )}
           />
         </Box>

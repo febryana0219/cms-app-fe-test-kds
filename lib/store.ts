@@ -5,22 +5,27 @@ import * as db from './db';
 type State = {
   menuGroups: MenuGroup[];
   menus: MenuItem[];
-  user?: string | null;
+  user: string | null;
+
+  // actions
   loadFromDb: () => Promise<void>;
   setUser: (u?: string | null) => void;
+
   addMenuGroup: (name: string) => Promise<void>;
   updateMenuGroup: (id: string, name: string) => Promise<void>;
   deleteMenuGroup: (id: string) => Promise<void>;
+
   addMenu: (groupId: string, title: string, url?: string) => Promise<void>;
   updateMenu: (id: string, title: string, url?: string) => Promise<void>;
   deleteMenu: (id: string) => Promise<void>;
+
   login: (username: string, password: string) => Promise<boolean>;
   logout: () => void;
 };
 
 const genId = () =>
   typeof crypto !== 'undefined' && 'randomUUID' in crypto
-    ? (crypto as any).randomUUID()
+    ? crypto.randomUUID()
     : `${Date.now()}-${Math.floor(Math.random() * 10000)}`;
 
 export const useStore = create<State>((set, get) => ({
@@ -37,18 +42,25 @@ export const useStore = create<State>((set, get) => ({
   },
 
   addMenuGroup: async (name) => {
-    const g: MenuGroup = { id: genId(), name, createdAt: Date.now() };
+    const g: MenuGroup = {
+      id: genId(),
+      name,
+      createdAt: Date.now(),
+    };
     await db.addMenuGroup(g);
     set((s) => ({ menuGroups: [...s.menuGroups, g] }));
   },
 
   updateMenuGroup: async (id, name) => {
-    const state = get();
-    const found = state.menuGroups.find((g) => g.id === id);
+    const found = get().menuGroups.find((g) => g.id === id);
     if (!found) return;
-    const updated = { ...found, name };
+
+    const updated: MenuGroup = { ...found, name };
     await db.updateMenuGroup(updated);
-    set((s) => ({ menuGroups: s.menuGroups.map((g) => (g.id === id ? updated : g)) }));
+
+    set((s) => ({
+      menuGroups: s.menuGroups.map((g) => (g.id === id ? updated : g)),
+    }));
   },
 
   deleteMenuGroup: async (id) => {
@@ -61,18 +73,27 @@ export const useStore = create<State>((set, get) => ({
   },
 
   addMenu: async (groupId, title, url) => {
-    const m: MenuItem = { id: genId(), groupId, title, url, createdAt: Date.now() };
+    const m: MenuItem = {
+      id: genId(),
+      groupId,
+      title,
+      url: url ?? '',
+      createdAt: Date.now(),
+    };
     await db.addMenu(m);
     set((s) => ({ menus: [...s.menus, m] }));
   },
 
   updateMenu: async (id, title, url) => {
-    const state = get();
-    const found = state.menus.find((m) => m.id === id);
+    const found = get().menus.find((m) => m.id === id);
     if (!found) return;
-    const updated = { ...found, title, url };
+
+    const updated: MenuItem = { ...found, title, url: url ?? '' };
     await db.updateMenu(updated);
-    set((s) => ({ menus: s.menus.map((m) => (m.id === id ? updated : m)) }));
+
+    set((s) => ({
+      menus: s.menus.map((m) => (m.id === id ? updated : m)),
+    }));
   },
 
   deleteMenu: async (id) => {
@@ -81,7 +102,6 @@ export const useStore = create<State>((set, get) => ({
   },
 
   login: async (username, password) => {
-    // simple hardcoded auth
     if (username === 'admin' && password === 'password123') {
       set({ user: username });
       localStorage.setItem('cms_user', username);

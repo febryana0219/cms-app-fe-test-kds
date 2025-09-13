@@ -1,6 +1,13 @@
-// components/MenuGroupForm.tsx
 import React from 'react';
-import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField } from '@mui/material';
+import {
+  Box,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  TextField,
+} from '@mui/material';
 import { useForm, Controller } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -13,14 +20,16 @@ type Props = {
 };
 
 const schema = yup.object({
-  name: yup.string().required('Group name is required').min(2),
+  name: yup.string().required('Group name is required').min(2, 'Min 2 characters'),
 });
 
-export default function MenuGroupForm({ open, initial, onClose }: Props) {
-  const addMenuGroup = useStore(s => s.addMenuGroup);
-  const updateMenuGroup = useStore(s => s.updateMenuGroup);
+type MenuGroupFormInputs = yup.InferType<typeof schema>;
 
-  const { control, handleSubmit, reset } = useForm({
+export default function MenuGroupForm({ open, initial, onClose }: Props) {
+  const addMenuGroup = useStore((s) => s.addMenuGroup);
+  const updateMenuGroup = useStore((s) => s.updateMenuGroup);
+
+  const { control, handleSubmit, reset } = useForm<MenuGroupFormInputs>({
     defaultValues: { name: initial?.name || '' },
     resolver: yupResolver(schema),
   });
@@ -28,8 +37,8 @@ export default function MenuGroupForm({ open, initial, onClose }: Props) {
   React.useEffect(() => {
     reset({ name: initial?.name || '' });
   }, [initial, reset]);
-
-  const onSubmit = async (data: any) => {
+  
+  const onSubmit = async (data: MenuGroupFormInputs) => {
     if (initial?.id) {
       await updateMenuGroup(initial.id, data.name);
     } else {
