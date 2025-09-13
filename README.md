@@ -35,7 +35,7 @@ Aplikasi **Content Management System (CMS)** sederhana yang dibuat menggunakan *
 1. **Clone repositori ini**
 
     ```bash
-    git clone https://github.com/username/cms-app.git
+    git clone https://github.com/febryana0219/cms-app-fe-test-kds.git
     cd cms-app
     ```
 
