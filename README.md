@@ -28,6 +28,9 @@ Aplikasi **Content Management System (CMS)** sederhana yang dibuat menggunakan *
 - [Yup](https://github.com/jquense/yup) & [React Hook Form](https://react-hook-form.com/) (validasi & form)
 - IndexedDB (penyimpanan lokal)
 
+> 💡 **Catatan:** Proyek ini dikembangkan menggunakan **Node.js v22.15.0**.  
+> Disarankan menggunakan versi yang sama atau lebih baru agar kompatibel.
+
 ---
 
 ## 🔧 Instalasi & Menjalankan Proyek
